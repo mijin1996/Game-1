@@ -4,28 +4,31 @@ using UnityEngine;
 
 public class BulletSpawner : MonoBehaviour {
     public GameObject bulletPrefab;
-    public float spwanRateMin = 0.5f;
-    public float spwanRateMax = 3f;
-
+    public Transform firePoint;
     private Transform target;
-    private float spwanRate;
-    private float timeAfterSpwan; //최근 생성 시점에서 경과한 시간
+
+    public float spawnRateMin = 0.5f;
+    public float spawnRateMax = 3f;
+    
+    private float spawnRate;
+    private float timeAfterSpawn; //최근 생성 시점에서 경과한 시간
 
     void Start() {
-        timeAfterSpwan = 0f;
-        spwanRate = Random.Range(spwanRateMin, spwanRateMax);
+        timeAfterSpawn = 0f;
+        spawnRate = Random.Range(spawnRateMin, spawnRateMax);
         target = FindFirstObjectByType<PlayerInput>().transform;
     }
 
     void Update() {
-        timeAfterSpwan += Time.deltaTime;
+        timeAfterSpawn += Time.deltaTime;
 
-        if (timeAfterSpwan >= spwanRate) {
-            timeAfterSpwan = 0f; //누적 시간 초기화
+        if (timeAfterSpawn >= spawnRate) {
+            timeAfterSpawn = 0f; //누적 시간 초기화
 
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
-            bullet.transform.LookAt(target);
-            spwanRate = Random.Range(spwanRateMin, spwanRateMax); // 재생성 주기 랜덤화
+            //GameObject bulletObj = Instantiate(bulletPrefab, transform.position, transform.rotation); //자기 위치에서 생성
+            GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation); // 따로 지정한 위치에서 생성            
+            bulletObj.transform.LookAt(target);
+            spawnRate = Random.Range(spawnRateMin, spawnRateMax); // 재생성 주기 랜덤화
 
         }
     }
@@ -35,12 +38,15 @@ public class BulletSpawner : MonoBehaviour {
  /*
 [📌📝MEMO] p.352
 
-< Quaternion과 짝인 아이들 >
+<Transform의 기능 >
 LookAt::⁉️ 갑자기 바뀜
-LookRotation::⁉️ 방향을 바라보기 위해 서서히 회전 = 자연스러움
+
+< Quaternion과 짝인 아이들 >
+LookRotation::⁉️ 둘 다 한 번 돌려서 같은 방향 바라봄.
+서서히 돌리려면 Quaternion.Slerp를 함께 써야 해요. = 자연스러움
 
 < >
-Time.deltaTime::⁉️ 이전 프레임에서 현재 프레임까지 걸린 perSec = 서로 다른 성능의 컴퓨터나 핸드폰에서 동일한 속도를 유지하기 위함
+Time.deltaTime::⁉️ 이전 프레임에서 현재 프레임까지 걸린 (perSec마다 로딩시간) = 서로 다른 성능의 컴퓨터나 핸드폰에서 동일한 속도를 유지하기 위함
 
 < >
 <Type(컴퍼넌트)>
