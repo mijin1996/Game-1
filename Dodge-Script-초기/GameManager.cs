@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour{
             timeText.text = "Time: " + (int)surviveTime; 
         }else{
             if(Input.GetKeyDown(KeyCode.R)){
-                SceneManager.LoadScene("SampleScene");
+                sceneChange.LoadScene("SampleScene");
             }
         }
     }
@@ -51,11 +51,11 @@ public class GameManager : MonoBehaviour{
 public int sceneIndex = 0; // 인스펙터에서 숫자로 수정 가능
 void Update(){
     if (Input.GetKeyDown(KeyCode.R)){
-        SceneManager.LoadScene(sceneIndex);
+        sceneChange.LoadScene(sceneIndex);
     }
 }
 
-static 클래스: PlayerPrefs, Time, Random, Input, SceneManager
+static 클래스: PlayerPrefs, Time, Random, Input, sceneChange
 PlayerPrefs::⁉️ Prefs는 설정 값(메서드)들만 가져와서 컴퓨터에 저장, 게임을 꺼도 메모리 할당됨
 
 벡터, 하나가 회전하면 다른 점들은 잠김 = 오일러 각의 짐벌락 현상(xyz가 한축 90도가 되면 두 축이 겹쳐서 한 방향으로 회전할 수 없음) = 2D게임에서는 상관없지만 3D게임에서는 회전이 자연스럽지 않음
