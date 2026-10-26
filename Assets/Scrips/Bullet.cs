@@ -33,6 +33,12 @@ public class Bullet : MonoBehaviour {
                 GameObject.Find("Music").GetComponent<AudioSource>().Play();
             }
         }
+        // player를 향해 가는 중에 장애물과 닿아도 터짐
+        else if (!other.isTrigger && other.GetComponentInParent<BulletSpawner>() == null) {
+            Instantiate(effect, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+    
     }
 }
 

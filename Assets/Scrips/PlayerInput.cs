@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour{
     public Rigidbody rb;
     public float speed = 8f;
+    public float skinWidth = 0.05f; // 벽과 남겨둘 여유 거리 (벽에 파고들지 않게)
+    public float stepHeight = 0.3f; // 이 높이 아래(바닥, 낮은 턱)는 벽으로 보지 않음
+    CapsuleCollider body;
 
     Animator ani; // 걷는 애니메이션을 주기위함
 
@@ -26,7 +29,26 @@ public class PlayerInput : MonoBehaviour{
     void Start(){
         rb = GetComponent<Rigidbody>(); //떨어지지 않게 하기위해 리지드 바디 세팅
         ani =  GetComponent<Animator>();
+        body = GetComponent<CapsuleCollider>();
         groundY = transform.position.y; // 시작 높이를 바닥으로 기억
+    }
+
+    // 발밑에서 stepHeight만큼 띄운 구를 앞으로 쏴서 벽이 있는지 검사
+    // (바닥에 닿은 채로 검사하면 바닥이 먼저 맞아서 벽을 못 찾기 때문에 띄워서 쏨)
+    bool IsBlocked(Vector3 dir, float distance) {
+        Bounds b = body.bounds;                       // 월드 기준 크기 (스케일 반영)
+        float radius = b.extents.x * 0.8f;            // 몸보다 살짝 작은 구
+        float feet = b.min.y;
+        Vector3 origin = new Vector3(b.center.x, feet + stepHeight + radius, b.center.z);
+        float castDist = distance + skinWidth + (b.extents.x - radius);
+
+        foreach (RaycastHit hit in Physics.SphereCastAll(origin, radius, dir, castDist, ~0, QueryTriggerInteraction.Ignore)) {
+            if (hit.collider.attachedRigidbody == rb) { continue; } // 내 몸
+            if (hit.distance <= 0f) { continue; }                   // 이미 겹쳐 있으면 빠져나갈 수 있게
+            if (hit.normal.y >= 0.7f && hit.point.y <= feet + stepHeight) { continue; } // 점프했을 때 건물·나무를 통과하지 않게 함 (발밑 바닥만 통과)            return true;
+            return true;   // ← 이 줄! 위의 세 경우가 아니면 "벽이다, 멈춰라"
+        }
+        return false;
     }
 
     void Update(){       
@@ -37,7 +59,12 @@ public class PlayerInput : MonoBehaviour{
         }
         if( move != Vector3.zero){
             transform.rotation = Quaternion.LookRotation(move);
-            transform.Translate(Vector3.forward * Time.deltaTime * speed);
+
+            // 이동 전에 앞을 미리 검사 : 벽(건물 등)이 있으면 멈춤
+            float step = speed * Time.deltaTime;
+            if (!IsBlocked(transform.forward, step)) {
+                transform.Translate(Vector3.forward * step);
+            }
 
             ani.SetBool("Walk", true);
         }
