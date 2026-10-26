@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour {
     
     public GameObject effect;
 
-    public AudioSource hitAudio;
+    public AudioSource hitSource;
     public AudioClip clipDie;
 
     void Start() {
@@ -21,7 +21,7 @@ public class Bullet : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         if (other.tag == "PlayerInput") {
             // 맞으면 소리가 생성
-            hitAudio.PlayOneShot(clipDie);
+            hitSource.PlayOneShot(clipDie);
             // 맞으면 이펙트 생성
             Instantiate(effect, other.transform.position, Quaternion.identity);
 
