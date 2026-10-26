@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: ee1370e53fe68a940a00d36a5a47aae3
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Glue Gun
+  fontNames:
+  - Glue Gun
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 140934
+  packageName: TrollNest Free UI Buttons
+  packageVersion: 1.0
+  assetPath: Assets/[UIFabrica]TrollNest_Free_v01/05.FONT/Glue Gun.otf
+  uploadId: 301021
