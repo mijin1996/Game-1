@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 760a68be7be59f9479b9322e3c36b06f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  speed: 8
+  speed: 16
   effect: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
   hitSource: {fileID: 1617190194447394420}
   clipDie: {fileID: 8300000, guid: 207c6ac6ec7ef9d4db7dcc61899b0314, type: 3}
